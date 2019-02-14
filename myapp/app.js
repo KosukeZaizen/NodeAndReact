@@ -1,10 +1,11 @@
 var express = require('express');
 var app = express();
 
-
+app.set('views', __dirname + '/views')
+app.set('view engine', 'ejs')
 
 app.get('/', function (req, res) {
-  res.send(read("pages/index.txt"));
+  res.render("index");
 });
 
 app.get('/test', function (req, res) {
@@ -15,6 +16,8 @@ app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 })
 
+
+/*
 function read(filePath) {
   var fs = require('fs');
   var content = new String();
@@ -22,3 +25,4 @@ function read(filePath) {
   console.log("content:" + content);
   return content;
 };
+*/
