@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.6.1",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "fs-extra": "^7.0.1",
+    "rimraf": "^2.6.3"
   }
 }
