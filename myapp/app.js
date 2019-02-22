@@ -57,7 +57,11 @@ app.get('/', function (req, res) {
 });
 
 app.get('/:name', function (req, res) {
-  res.render(req.params.name);
+  if(false){
+    res.render(req.params.name);
+  }else{
+    res.render("error", {error: "The page [" + req.params.name + "] is not exist in this website."});
+  }
 });
 
 app.listen(3000, function () {
