@@ -1,2 +1,7 @@
 <h1>Error occured:</h1><br />
-<%= error %>
+<%# error変数が定義されているか判定 %>
+<% if ('error' in this) { %>
+  <%= error %>
+<% }else{ %>
+  No Error
+<% } %>

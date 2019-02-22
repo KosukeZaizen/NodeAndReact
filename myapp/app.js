@@ -1,7 +1,7 @@
-console.log("hello");
-
 //htmlsフォルダ削除
-var rimraf = require('rimraf');
+let rimraf = require('rimraf');
+let fs = require('fs');
+
 rimraf("views", function (err) {
     if(err){
         console.error(err);
@@ -10,7 +10,7 @@ rimraf("views", function (err) {
         console.log('views folder removed!');
 
         //viewsフォルダをコピーして、新たなhtmlsフォルダを作成
-        var fsExtra = require('fs-extra');
+        let fsExtra = require('fs-extra');
         fsExtra.copy('htmls', 'views', {
             clobber: true,
             dereference: false,
@@ -26,13 +26,12 @@ rimraf("views", function (err) {
             console.log('views folder was recreated!');
 
              //viewsフォルダ内の.ejsファイルの拡張子を.htmlに変換
-             let fs = require('fs');
              fs.readdir('./views', function(err, files){
                if (err) throw err;
                console.log("change from " + files);
                for(let htmlFile of files){
-                   var oldPath = './views/' + htmlFile;
-                   var newPath = './views/' + htmlFile.replace(".html", ".ejs");
+                   let oldPath = './views/' + htmlFile;
+                   let newPath = './views/' + htmlFile.replace(".html", ".ejs");
                    fs.rename(oldPath, newPath, function (err) {
                      if (err) throw err
                      console.log(oldPath + ':  Successfully renamed - AKA moved!')
@@ -46,26 +45,51 @@ rimraf("views", function (err) {
 
 
 //サーバー起動
-var express = require('express'),
+let express = require('express'),
   app = express();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function (req, res) {
-  res.render("index");
-});
 
+//viewsフォルダー内のファイル名リスト
+let views = [];
+
+//トップページ表示
+app.get('/', function (req, res) {
+  dispIndex(req, res);
+});
+app.get('/index', function (req, res) {
+  dispIndex(req, res);
+});
+function dispIndex(req, res){
+  //viewsフォルダー内のファイルパスを取得
+  fs.readdir('./views', function(err, files){
+    if (err) throw err;
+    console.log("files :" + files);
+    views = [];
+    for(let htmlFile of files){
+      let ejsFile = htmlFile.replace(".ejs", "");
+      views.push(ejsFile);
+    }
+    console.log(views);
+    res.render("index", {arrPaths: views});
+  });
+}
+
+
+//各ページ表示
 app.get('/:name', function (req, res) {
-  if(false){
+  if(views.indexOf(req.params.name) > -1){
     res.render(req.params.name);
   }else{
     res.render("error", {error: "The page [" + req.params.name + "] is not exist in this website."});
   }
 });
 
+
+//Webサーバー起動
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
-
 

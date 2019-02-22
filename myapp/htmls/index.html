@@ -5,6 +5,13 @@
     <script src="http://fb.me/JSXTransformer-0.13.3.js"></script>
   </head>
   <body>
+
+    <% arrPaths.forEach(function (value, key) { %>
+    <p>[<%= key %>]: <a href="<%= value %>"><%= value %></a></p>
+    <% }); %>
+
+    <br />
+    <br />
     <div id="app"></div>
     <script type="text/jsx">
 
