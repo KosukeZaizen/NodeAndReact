@@ -80,6 +80,7 @@ function dispIndex(req, res){
 
 //各ページ表示
 app.get('/:name', function (req, res) {
+  console.log("views.indexOf(req.params.name): " + views.indexOf(req.params.name));
   if(views.indexOf(req.params.name) > -1){
     res.render(req.params.name);
   }else{
