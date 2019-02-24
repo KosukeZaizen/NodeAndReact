@@ -11,8 +11,22 @@
   <script type="text/babel">
     (() => {
       const name = "zai";
+
+      // スタイルを定義
+      const Styles= {
+          bgRed : {
+              backgroundColor: "red",
+          },
+          bgBlue : {
+              backgroundColor: "blue",
+          }
+      }
       ReactDOM.render(
-        <p>Hello! {name.toUpperCase()}</p>,
+        <div>
+        <p>Hello! {name.toUpperCase()}</p>
+        <p style={Styles.bgRed}>背景：赤</p>
+        <p style={Styles.bgBlue}>背景：青</p>
+        </div>,
         document.getElementById('root')
       )
     })();

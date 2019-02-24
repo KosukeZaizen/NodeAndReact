@@ -6,61 +6,61 @@
   <script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
   <style>
-  body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-}
 
-ol, ul {
-  padding-left: 30px;
-}
+    body {
+      font: 14px "Century Gothic", Futura, sans-serif;
+      margin: 20px;
+    }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
+    ol, ul {
+      padding-left: 30px;
+    }
 
-.status {
-  margin-bottom: 10px;
-}
+    .board-row:after {
+      clear: both;
+      content: "";
+      display: table;
+    }
 
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
+    .status {
+      margin-bottom: 10px;
+    }
 
-.square:focus {
-  outline: none;
-}
+    .square {
+      background: #fff;
+      border: 1px solid #999;
+      float: left;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 34px;
+      height: 34px;
+      margin-right: -1px;
+      margin-top: -1px;
+      padding: 0;
+      text-align: center;
+      width: 34px;
+    }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
+    .square:focus {
+      outline: none;
+    }
 
-.game {
-  display: flex;
-  flex-direction: row;
-}
+    .kbd-navigation .square:focus {
+      background: #ddd;
+    }
 
-.game-info {
-  margin-left: 20px;
-}
+    .game {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .game-info {
+      margin-left: 20px;
+    }
 
   </style>
 </head>
 <body>
-
 
   <div id="errors" style="
     background: #c00;
@@ -104,6 +104,7 @@ ol, ul {
 
 
   <script type="text/babel">
+
   class Square extends React.Component {
     render() {
       return (
