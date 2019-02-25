@@ -9,18 +9,23 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="text/javascript">
+    <script type="text/babel">
       const rootElement = document.getElementById('root');
-      //const element = document.createElement('div');
-      //element.textContent = "hello";
-      //element.className = "container";
-      //rootElement.appendChild(element);
 
-      const element = React.createElement('div', {
-          className: 'container',
-          children: 'Hello World',
-        })
-      console.log(element);
+      //const element = React.createElement('div', {
+      //   className: 'container',
+      //   children: 'Hello World',
+      // })
+
+      const content = "Hello!";
+      const myClassName = "container";
+      const props = {
+        className: 'container',
+        children: 'Hello World',
+      }
+      const element = (
+        <div className {...props} />
+      )
       ReactDOM.render(element, rootElement);
     </script>
   </body>
