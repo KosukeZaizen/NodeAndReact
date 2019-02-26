@@ -6,7 +6,9 @@ import './index.css';
 class Square extends React.Component {
   render() {
     return (
-      <button className="square">
+      <button className="square" onClick={() =>
+        alert('click')
+      }>
         {this.props.value}
       </button>
     );
@@ -18,8 +20,7 @@ class Board extends React.Component {
     return <Square value={i} />;
   }
 
-  render() {
-    const status = 'Next player: X';
+  renderRow(i) {
     const list = [[],[],[]];
 
     for(let i=0; i<9; i+=3){
@@ -28,19 +29,25 @@ class Board extends React.Component {
       }
     }
 
+    return(
+      <div className="board-row">
+        {list[i]}
+      </div>
+    )
+  }
+
+  render() {
+    const status = 'Next player: X';
+    const rows = [];
+    for(let i=0; i<3; i++){
+      rows.push(this.renderRow(i));
+    }
+
     return (
       <div>
         <div className="status">{status}</div>
-          <div className="board-row">
-            {list[0]}
-          </div>
-          <div className="board-row">
-            {list[1]}
-          </div>
-          <div className="board-row">
-            {list[2]}
-          </div>
-        </div>
+        {rows}
+      </div>
     );
   }
 }
