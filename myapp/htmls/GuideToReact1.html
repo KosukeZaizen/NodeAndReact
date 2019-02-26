@@ -10,21 +10,13 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      const rootElement = document.getElementById('root');
-
-      //const element = React.createElement('div', {
-      //   className: 'container',
-      //   children: 'Hello World',
-      // })
-
-      const content = "Hello!";
-      const myClassName = "container";
-      const props = {
-        className: 'container',
-        children: 'Hello World',
-      }
+      const rootElement = document.getElementById('root')
+      const Message = props => <div>{props.children}</div>
       const element = (
-        <div className {...props} />
+        <div className="container">
+          <Message>Hello World</Message>
+          <Message>Bye World</Message>
+        </div>
       )
       ReactDOM.render(element, rootElement);
     </script>
