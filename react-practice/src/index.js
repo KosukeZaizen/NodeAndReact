@@ -22,9 +22,9 @@ class Board extends React.Component {
     const status = 'Next player: X';
     const list = [[],[],[]];
 
-    for(let i=0; i<3; i++){
-      for(let j=3*i; j<3*i + 3; j++){
-        list[i].push(this.renderSquare(j));
+    for(let i=0; i<9; i+=3){
+      for(let j=i; j<i+3; j++){
+        list[i/3].push(this.renderSquare(j));
       }
     }
 
