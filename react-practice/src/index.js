@@ -7,7 +7,7 @@ class Square extends React.Component {
   render() {
     return (
       <button className="square">
-        {/* TODO */}
+        {this.props.value}
       </button>
     );
   }
@@ -15,31 +15,32 @@ class Square extends React.Component {
 
 class Board extends React.Component {
   renderSquare(i) {
-    return <Square />;
+    return <Square value={i} />;
   }
 
   render() {
     const status = 'Next player: X';
+    const list = [[],[],[]];
+
+    for(let i=0; i<3; i++){
+      for(let j=3*i; j<3*i + 3; j++){
+        list[i].push(this.renderSquare(j));
+      }
+    }
 
     return (
       <div>
         <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          <div className="board-row">
+            {list[0]}
+          </div>
+          <div className="board-row">
+            {list[1]}
+          </div>
+          <div className="board-row">
+            {list[2]}
+          </div>
         </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
     );
   }
 }
