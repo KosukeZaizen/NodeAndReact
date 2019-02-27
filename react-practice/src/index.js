@@ -32,6 +32,7 @@ class Board extends React.Component {
           {this.renderSquare(0)}
           {this.renderSquare(1)}
           {this.renderSquare(2)}
+          {this.renderSquare(3)}
         </div>
         <div className="board-row">
           {this.renderSquare(3)}
@@ -42,6 +43,11 @@ class Board extends React.Component {
           {this.renderSquare(6)}
           {this.renderSquare(7)}
           {this.renderSquare(8)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(9)}
+          {this.renderSquare(10)}
+          {this.renderSquare(11)}
         </div>
       </div>
     );
@@ -67,7 +73,6 @@ function calculateWinner(squares) {
   }
   return null;
 }
-
 
 
 class Game extends React.Component {
