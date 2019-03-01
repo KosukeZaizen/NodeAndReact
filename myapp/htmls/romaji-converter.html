@@ -22,7 +22,7 @@
           max-width: 800px;
           font-size:20px;
         }
-        th{
+        th {
           padding:5px 5px 7px;
           color:#FFF;
           border:1px solid #729CC6;
@@ -30,6 +30,13 @@
           text-shadow:1px 1px 2px rgba(255,255,255,0.7);
           text-shadow:-1px -1px 2px rgba(0,0,0,0.7);
           text-align:center;
+        }
+        .tdOutput{
+          position: relative;
+        }
+        #btnCopy{
+          position: absolute;
+          bottom: 7px;
         }
 
     </style>
@@ -40,15 +47,27 @@
     <br />
     <table class="table-responsive table-bordered romaji-table">
       <tr>
-        <th class="column"><center>ひらがな<br>or<br>カタカナ</center></th><th class="column"><center>ローマ字<br>（ヘボン式）</center></th>
+        <th class="column">
+          <center>ひらがな<br>or<br>カタカナ</center>
+        </th>
+        <th class="column">
+          <center>ローマ字<br>（ヘボン式）</center>
+        </th>
       </tr>
       <tr>
-        <td class="row"><textarea class="io" id="input" onFocus="check();"></textarea></td><td valign="top"><p id="output"></p></td>
+        <td class="row">
+          <textarea class="io" id="input" onFocus="check();"></textarea>
+        </td>
+        <td valign="top" class="tdOutput">
+          <p id="output"></p><br />
+          <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">結果をコピー</button>
+        </td>
       </tr>
     </table>
     <br>
     <div>ヘボン式変換ルールは、<a href="http://www.seikatubunka.metro.tokyo.jp/passport/documents/0000000485.html" target="_blank" rel="noopener">東京都生活文化局</a>様のルールに準拠しております。</div>
     <br />
+    <!--
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <ins class="adsbygoogle"
          style="display:block"
@@ -59,6 +78,7 @@
     <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
+  -->
   </center>
 
     <script>
@@ -73,22 +93,29 @@
       const objN = {"ん":"n"};
       const objN_K = {"ン":"n"};
       const objLongSound = {"oo":"o","ou":"o","uu":"u"};
+
+      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力してください。";
+      const ACTIVE_BUTTON = "btn btn-info btn-lg btn-block active";
+      const DISABLED_BUTTON = "btn btn-info btn-lg btn-block disabled";
       //------------------------------------------------------------
 
 
       let elemInput = document.getElementById('input');
       let elemOutput = document.getElementById('output');
+      let btnCopy = document.getElementById('btnCopy');
 
       window.addEventListener('load', checkBlank, false);
       elemInput.addEventListener('blur', checkBlank, false);
       elemInput.addEventListener('keyup', convert, false);
       elemInput.addEventListener('click', check, false);
       elemInput.addEventListener('keydown', check, false);
+      btnCopy.addEventListener('click', copyRomaji, false);
+
 
       //最初　＋　テキストボックスが編集された直後
       function checkBlank(){
         if(elemInput.value == ""){
-          elemInput.value = "ここに [ひらがな] or [カタカナ] を入力してください。";
+          elemInput.value = PROMPT;
           elemInput.style.color = "red";
           elemOutput.value = "";
         } else {
@@ -98,11 +125,19 @@
 
       //値を入力する直前
       function check(){
-        if(elemInput.value == "ここに [ひらがな] or [カタカナ] を入力してください。"){
+        if(elemInput.value == PROMPT){
           elemInput.value = "";
           elemOutput.value = "";
         } else {
           elemInput.style.color = "black";
+        }
+      }
+
+      function enableButton(){
+        if(elemOutput.innerHTML == ""){
+          btnCopy.className = DISABLED_BUTTON;
+        } else {
+          btnCopy.className = ACTIVE_BUTTON;
         }
       }
 
@@ -128,6 +163,7 @@
 
         elemOutput.innerHTML = text;
         checkBlank();
+        enableButton();
       }
 
       function convertChars(text, obj){
@@ -149,6 +185,47 @@
           }
         }
         return arrText.join("");
+      }
+
+      function copyRomaji(){
+        if(execCopy(elemOutput.innerHTML)){
+          alert('ローマ字をコピーしました。任意の場所に張り付けて下さい。');
+        }
+        else {
+          alert('このブラウザは、コピー機能に対応していません。手動でコピーしてください。');
+        }
+      }
+
+      function execCopy(string){
+
+        // 空div 生成
+        var tmp = document.createElement("div");
+        // 選択用のタグ生成
+        var pre = document.createElement('pre');
+
+        // 親要素のCSSで user-select: none だとコピーできないので書き換える
+        pre.style.webkitUserSelect = 'auto';
+        pre.style.userSelect = 'auto';
+
+        tmp.appendChild(pre).textContent = string;
+
+        // 要素を画面外へ
+        var s = tmp.style;
+        s.position = 'fixed';
+        s.right = '200%';
+
+        // body に追加
+        document.body.appendChild(tmp);
+        // 要素を選択
+        document.getSelection().selectAllChildren(tmp);
+
+        // クリップボードにコピー
+        var result = document.execCommand("copy");
+
+        // 要素削除
+        document.body.removeChild(tmp);
+
+        return result;
       }
 
     </script>
