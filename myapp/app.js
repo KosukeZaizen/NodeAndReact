@@ -45,8 +45,14 @@ rimraf("views", function (err) {
 
 
 //サーバー起動
-let express = require('express'),
-  app = express();
+let express = require('express');
+let app = express();
+let favicon = require('serve-favicon');
+let path = require('path');
+
+
+//ファビコンの指定
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -68,9 +74,12 @@ function dispIndex(req, res){
     if (err) throw err;
     console.log("files :" + files);
     views = [];
-    for(let htmlFile of files){
-      let ejsFile = htmlFile.replace(".ejs", "");
-      views.push(ejsFile);
+    for(let ejsFile of files){
+      if(ejsFile != "error.ejs" && ejsFile != "index.ejs"){
+        console.log(ejsFile);
+        let file = ejsFile.replace(".ejs", "");
+        views.push(file);
+      }
     }
     console.log(views);
     res.render("index", {arrPaths: views});

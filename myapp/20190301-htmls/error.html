@@ -1,0 +1,8 @@
+<h1>Error occured:</h1><br />
+<%# error変数が定義されているか判定 %>
+<% if (typeof error === 'undefined') { var error = ''; } %>
+<% if (error != "") { %>
+  <%= error %>
+<% }else{ %>
+  No Error
+<% } %>
