@@ -13,14 +13,17 @@
         .row {
           height: 300px;
         }
-        .io {
+        .t-area {
           width: 100%;
-          height: 300px;
+          height: 100%;
+          min-height: 300px;
         }
         .romaji-table {
           width: 100%;
           max-width: 800px;
+          height: 300px;
           font-size:20px;
+          table-layout:fixed;
         }
         th {
           padding:5px 5px 7px;
@@ -33,6 +36,7 @@
         }
         .tdOutput{
           position: relative;
+          word-wrap: break-word;
         }
         #btnCopy{
           position: absolute;
@@ -56,7 +60,7 @@
       </tr>
       <tr>
         <td class="row">
-          <textarea class="io" id="input" onFocus="check();"></textarea>
+          <textarea class="t-area" id="input"></textarea>
         </td>
         <td valign="top" class="tdOutput">
           <p id="output"></p><br />
@@ -93,6 +97,7 @@
       const objN = {"ん":"n"};
       const objN_K = {"ン":"n"};
       const objLongSound = {"oo":"o","ou":"o","uu":"u"};
+      const objChangeLine = {"<br />":"\n","<br/>":"\n","<br>":"\n"}
 
       const PROMPT = "ここに [ひらがな] or [カタカナ] を入力してください。";
       const ACTIVE_BUTTON = "btn btn-info btn-lg btn-block active";
@@ -161,6 +166,8 @@
 
         text = convertChars(text, objLongSound);
 
+        text = text.replace(/\r?\n/g, '<br />');
+
         elemOutput.innerHTML = text;
         checkBlank();
         enableButton();
@@ -188,41 +195,36 @@
       }
 
       function copyRomaji(){
-        if(execCopy(elemOutput.innerHTML)){
-          alert('ローマ字をコピーしました。任意の場所に張り付けて下さい。');
+
+        let strTarget = convertChars(elemOutput.innerHTML, objChangeLine);
+
+        if(execCopy(strTarget)){
+          alert('ローマ字をコピーしました。 任意の場所に張り付けて下さい。');
         }
         else {
-          alert('このブラウザは、コピー機能に対応していません。手動でコピーしてください。');
+          alert('このブラウザは、コピー機能に対応していません。 手動でコピーしてください。');
         }
       }
 
       function execCopy(string){
 
-        // 空div 生成
         var tmp = document.createElement("div");
-        // 選択用のタグ生成
         var pre = document.createElement('pre');
 
-        // 親要素のCSSで user-select: none だとコピーできないので書き換える
         pre.style.webkitUserSelect = 'auto';
         pre.style.userSelect = 'auto';
 
         tmp.appendChild(pre).textContent = string;
 
-        // 要素を画面外へ
         var s = tmp.style;
         s.position = 'fixed';
         s.right = '200%';
 
-        // body に追加
         document.body.appendChild(tmp);
-        // 要素を選択
         document.getSelection().selectAllChildren(tmp);
 
-        // クリップボードにコピー
         var result = document.execCommand("copy");
 
-        // 要素削除
         document.body.removeChild(tmp);
 
         return result;
