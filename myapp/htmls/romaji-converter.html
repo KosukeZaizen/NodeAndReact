@@ -82,7 +82,9 @@
           </td>
         </tr>
       </table>
-      <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
+      <span class='hidden-xs'>
+        <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
+      </span>
       <br>
       <div>ヘボン式変換ルールは、
         <a href="http://www.seikatubunka.metro.tokyo.jp/passport/documents/0000000485.html" target="_blank" rel="noopener">
@@ -90,6 +92,10 @@
         </a>
         様のルールに準拠しております。
       </div>
+      <br />
+      <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
+      <br />
+      developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
       <br />
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       <ins class="adsbygoogle"
@@ -103,11 +109,9 @@
       </script>
       <footer class="footer">
         <div class="container">
-          <p class="text-muted">
-            <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
-            <br />
-            developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
-          </p>
+          <span class='visible-xs'>
+            <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
+          </span>
         </div>
       </footer>
     </center>
