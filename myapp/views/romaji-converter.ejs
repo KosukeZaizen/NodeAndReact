@@ -48,10 +48,9 @@
           max-width: 800px;
         }
         .footer {
-          position: absolute;
+          position: relative;
           bottom: 0;
           width: 100%;
-          /* Set the fixed height of the footer here */
           background-color: #f5f5f5;
         }
     </style>
@@ -64,7 +63,7 @@
         <b>ヘボン式<span class='hidden-xs'> </span><span class='visible-xs'><br /></span>ローマ字変換</b>
       </h1>
       <br />
-      <span style="color:red;">※ 出力結果が正しいことを必ずご自身でもご確認の上、ご利用ください。</span>
+      <span style="color:red;">※ 出力結果を必ずご自身でもご確認の上、ご利用下さい。</span>
       <table class="table-responsive table-bordered romaji-table">
         <tr>
           <th class="column">
@@ -93,22 +92,22 @@
       </div>
       <br />
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- uni-browser -->
       <ins class="adsbygoogle"
            style="display:block"
            data-ad-client="ca-pub-8006404698960678"
-           data-ad-slot="2560074548"
+           data-ad-slot="6200460620"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>
       (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
+      <br />
       <footer class="footer">
         <div class="container">
-          <p class="text-muted">
-            <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
-            <br />
-            developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
-          </p>
+          <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
+          <br />
+          developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
         </div>
       </footer>
     </center>
@@ -127,8 +126,8 @@
       const objLongSound = {"oo":"o","ou":"o","uu":"u"};
       const objChangeLine = {"<br />":"\n","<br/>":"\n","<br>":"\n"}
 
-      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力してください。";
-      const PROMPT_ROMAJI = "kokoni [hiragana] or [katakana] o入力shitekudasai。";
+      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力して下さい。";
+      const PROMPT_ROMAJI = "kokoni [hiragana] or [katakana] o入力shite下sai。";
       const ACTIVE_BUTTON = "btn btn-info btn-lg btn-block active";
       const DISABLED_BUTTON = "btn btn-info btn-lg btn-block disabled";
       //------------------------------------------------------------
@@ -141,6 +140,7 @@
       window.addEventListener('load', chackAfterConvert, false);
       elemInput.addEventListener('blur', chackAfterConvert, false);
       elemInput.addEventListener('keyup', convert, false);
+      elemInput.addEventListener('change', convert, false);
       elemInput.addEventListener('click', checkBeforeInput, false);
       elemInput.addEventListener('keydown', checkBeforeInput, false);
       elemInput.addEventListener('scroll', inputScroll, false);
@@ -235,13 +235,13 @@
         let strTarget = convertChars(elemOutput.innerHTML, objChangeLine);
 
         if(elemOutput.innerHTML == ""){
-          alert("[ひらがな] or [カタカナ] を入力してください。");
+          alert("[ひらがな] or [カタカナ] を入力して下さい。");
         } else {
           if(execCopy(strTarget)){
             alert('ローマ字をコピーしました。 任意の場所に張り付けて下さい。');
           }
           else {
-            alert('このブラウザは、コピー機能に対応していません。 手動でコピーしてください。');
+            alert('このブラウザは、コピー機能に対応していません。 手動でコピーして下さい。');
           }
         }
       }

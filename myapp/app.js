@@ -54,6 +54,17 @@ let favicon = require('serve-favicon');
 let path = require('path');
 
 
+//httpsリダイレクト
+/*
+app.all('*', function(req, res) {
+  console.log("req.protocol: " + req.protocol);
+  if(req.protocol == 'http'){
+    console.log("HTTP: " + req.url);
+    return res.redirect("https://" + req.headers["host"] + req.url);
+  }
+});
+*/
+
 
 //ファビコンの指定
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
