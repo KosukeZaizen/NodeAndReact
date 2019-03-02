@@ -63,7 +63,7 @@
         <b>ヘボン式<span class='hidden-xs'> </span><span class='visible-xs'><br /></span>ローマ字変換</b>
       </h1>
       <br />
-      <span style="color:red;">※ 出力結果が正しいことを必ずご自身でもご確認の上、ご利用ください。</span>
+      <span style="color:red;">※ 出力結果を必ずご自身でもご確認の上、ご利用下さい。</span>
       <table class="table-responsive table-bordered romaji-table">
         <tr>
           <th class="column">
@@ -125,7 +125,7 @@
       const objLongSound = {"oo":"o","ou":"o","uu":"u"};
       const objChangeLine = {"<br />":"\n","<br/>":"\n","<br>":"\n"}
 
-      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力してください。";
+      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力して下さい。";
       const PROMPT_ROMAJI = "kokoni [hiragana] or [katakana] o入力shitekudasai。";
       const ACTIVE_BUTTON = "btn btn-info btn-lg btn-block active";
       const DISABLED_BUTTON = "btn btn-info btn-lg btn-block disabled";
@@ -234,13 +234,13 @@
         let strTarget = convertChars(elemOutput.innerHTML, objChangeLine);
 
         if(elemOutput.innerHTML == ""){
-          alert("[ひらがな] or [カタカナ] を入力してください。");
+          alert("[ひらがな] or [カタカナ] を入力して下さい。");
         } else {
           if(execCopy(strTarget)){
             alert('ローマ字をコピーしました。 任意の場所に張り付けて下さい。');
           }
           else {
-            alert('このブラウザは、コピー機能に対応していません。 手動でコピーしてください。');
+            alert('このブラウザは、コピー機能に対応していません。 手動でコピーして下さい。');
           }
         }
       }
