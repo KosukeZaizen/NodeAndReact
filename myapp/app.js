@@ -46,9 +46,13 @@ rimraf("views", function (err) {
 
 //サーバー起動
 let express = require('express');
+//var http = require("http");
+//var https = require("https");
+
 let app = express();
 let favicon = require('serve-favicon');
 let path = require('path');
+
 
 
 //ファビコンの指定
@@ -99,7 +103,13 @@ app.get('/:name', function (req, res) {
 
 
 //Webサーバー起動
-app.listen(3000, function () {
+/*
+http.createServer((express()).all("*", function (request, response) {
+    response.redirect(`https://${request.hostname}${request.url}`);
+})).listen(80);
+https.createServer(options, app).listen(443);
+*/
+app.listen(80, function () {
   console.log('Example app listening on port 3000!');
 });
 
