@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>リアルタイム ローマ字変換（ヘボン式）</title>
+    <title>ヘボン式 ローマ字変換</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <style>
         .column {
@@ -13,16 +14,20 @@
         .row {
           height: 300px;
         }
-        .io {
+        .t-area {
           width: 100%;
-          height: 300px;
+          height: 100%;
+          min-height: 300px;
+          margin: 0px;
         }
         .romaji-table {
           width: 100%;
           max-width: 800px;
+          height: 300px;
           font-size:20px;
+          table-layout:fixed;
         }
-        th{
+        th {
           padding:5px 5px 7px;
           color:#FFF;
           border:1px solid #729CC6;
@@ -31,35 +36,64 @@
           text-shadow:-1px -1px 2px rgba(0,0,0,0.7);
           text-align:center;
         }
+        .tdOutput {
+          height: 300px;
+          word-wrap: break-word;
+        }
+        .p {
+          overflow-y: scroll;
+          height: 300px;
+        }
+        #btnCopy{
+          max-width: 800px;
+        }
 
     </style>
   </head>
   <body>
     <center>
-    <h1><b>リアルタイム<span class='hidden-xs'> </span><span class='visible-xs'><br /></span>ローマ字変換<span class='hidden-xs'><br /></span><span class='visible-xs'><br /></span>（ヘボン式）</b></h1><br />
-    <br />
-    <table class="table-responsive table-bordered romaji-table">
-      <tr>
-        <th class="column"><center>ひらがな<br>or<br>カタカナ</center></th><th class="column"><center>ローマ字<br>（ヘボン式）</center></th>
-      </tr>
-      <tr>
-        <td class="row"><textarea class="io" id="input" onFocus="check();"></textarea></td><td valign="top"><p id="output"></p></td>
-      </tr>
-    </table>
-    <br>
-    <div>ヘボン式変換ルールは、<a href="http://www.seikatubunka.metro.tokyo.jp/passport/documents/0000000485.html" target="_blank" rel="noopener">東京都生活文化局</a>様のルールに準拠しております。</div>
-    <br />
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-8006404698960678"
-         data-ad-slot="2560074548"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </center>
+      <br />
+      <h1>
+        <b>ヘボン式<span class='hidden-xs'> </span><span class='visible-xs'><br /></span>ローマ字変換</b>
+      </h1>
+      <br />
+      <span style="color:red;">※ 出力結果が正しいことを必ずご自身でもご確認の上、ご利用ください。</span>
+      <table class="table-responsive table-bordered romaji-table">
+        <tr>
+          <th class="column">
+            <center>ひらがな<br>or<br>カタカナ</center>
+          </th>
+          <th class="column">
+            <center>ローマ字<br>（ヘボン式）</center>
+          </th>
+        </tr>
+        <tr valign="top">
+          <td class="row">
+            <textarea class="t-area" id="input"></textarea>
+          </td>
+          <td class="tdOutput">
+            <p class="p" id="output"></p>
+          </td>
+        </tr>
+      </table>
+      <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
+      <br>
+      <div>ヘボン式変換ルールは、<a href="http://www.seikatubunka.metro.tokyo.jp/passport/documents/0000000485.html" target="_blank" rel="noopener">東京都生活文化局</a>様のルールに準拠しております。</div>
+      <br />
+      <div><a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスの利用に当たって >></a></div>
+      <br />
+      <div>developed by <a href="https://twitter.com/Kosuke_Zaizen">@Kosuke_Zaizen</a></div>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-8006404698960678"
+           data-ad-slot="2560074548"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </center>
 
     <script>
 
@@ -73,36 +107,59 @@
       const objN = {"ん":"n"};
       const objN_K = {"ン":"n"};
       const objLongSound = {"oo":"o","ou":"o","uu":"u"};
+      const objChangeLine = {"<br />":"\n","<br/>":"\n","<br>":"\n"}
+
+      const PROMPT = "ここに [ひらがな] or [カタカナ] を入力してください。";
+      const PROMPT_ROMAJI = "kokoni [hiragana] or [katakana] o入力shitekudasai。";
+      const ACTIVE_BUTTON = "btn btn-info btn-lg btn-block active";
+      const DISABLED_BUTTON = "btn btn-info btn-lg btn-block disabled";
       //------------------------------------------------------------
 
 
       let elemInput = document.getElementById('input');
       let elemOutput = document.getElementById('output');
+      let btnCopy = document.getElementById('btnCopy');
 
-      window.addEventListener('load', checkBlank, false);
-      elemInput.addEventListener('blur', checkBlank, false);
+      window.addEventListener('load', chackAfterConvert, false);
+      elemInput.addEventListener('blur', chackAfterConvert, false);
       elemInput.addEventListener('keyup', convert, false);
-      elemInput.addEventListener('click', check, false);
-      elemInput.addEventListener('keydown', check, false);
+      elemInput.addEventListener('click', checkBeforeInput, false);
+      elemInput.addEventListener('keydown', checkBeforeInput, false);
+      elemInput.addEventListener('scroll', inputScroll, false);
+      btnCopy.addEventListener('click', copyRomaji, false);
 
-      //最初　＋　テキストボックスが編集された直後
-      function checkBlank(){
+      function inputScroll(){
+        elemOutput.scrollTop = elemInput.scrollTop;
+      }
+
+      function chackAfterConvert(){
         if(elemInput.value == ""){
-          elemInput.value = "ここに [ひらがな] or [カタカナ] を入力してください。";
+          elemInput.value = PROMPT;
           elemInput.style.color = "red";
-          elemOutput.value = "";
+          elemOutput.innerHTML = "";
         } else {
           elemInput.color = "black";
         }
+
+        if(elemOutput.innerHTML == PROMPT_ROMAJI){
+          elemOutput.innerHTML = "";
+        }
       }
 
-      //値を入力する直前
-      function check(){
-        if(elemInput.value == "ここに [ひらがな] or [カタカナ] を入力してください。"){
+      function checkBeforeInput(){
+        if(elemInput.value == PROMPT){
           elemInput.value = "";
-          elemOutput.value = "";
+          elemOutput.innerHTML = "";
         } else {
           elemInput.style.color = "black";
+        }
+      }
+
+      function enableButton(){
+        if(elemOutput.innerHTML == ""){
+          btnCopy.className = DISABLED_BUTTON;
+        } else {
+          btnCopy.className = ACTIVE_BUTTON;
         }
       }
 
@@ -126,8 +183,12 @@
 
         text = convertChars(text, objLongSound);
 
+        text = text.replace(/\r?\n/g, '<br />');
+
         elemOutput.innerHTML = text;
-        checkBlank();
+        chackAfterConvert();
+        enableButton();
+        inputScroll();
       }
 
       function convertChars(text, obj){
@@ -149,6 +210,46 @@
           }
         }
         return arrText.join("");
+      }
+
+      function copyRomaji(){
+
+        let strTarget = convertChars(elemOutput.innerHTML, objChangeLine);
+
+        if(elemOutput.innerHTML == ""){
+          alert("[ひらがな] or [カタカナ] を入力してください。");
+        } else {
+          if(execCopy(strTarget)){
+            alert('ローマ字をコピーしました。 任意の場所に張り付けて下さい。');
+          }
+          else {
+            alert('このブラウザは、コピー機能に対応していません。 手動でコピーしてください。');
+          }
+        }
+      }
+
+      function execCopy(string){
+
+        var tmp = document.createElement("div");
+        var pre = document.createElement('pre');
+
+        pre.style.webkitUserSelect = 'auto';
+        pre.style.userSelect = 'auto';
+
+        tmp.appendChild(pre).textContent = string;
+
+        var s = tmp.style;
+        s.position = 'fixed';
+        s.right = '200%';
+
+        document.body.appendChild(tmp);
+        document.getSelection().selectAllChildren(tmp);
+
+        var result = document.execCommand("copy");
+
+        document.body.removeChild(tmp);
+
+        return result;
       }
 
     </script>
