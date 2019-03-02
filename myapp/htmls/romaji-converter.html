@@ -48,7 +48,7 @@
           max-width: 800px;
         }
         .footer {
-          position: fixed;
+          position: relative;
           bottom: 0;
           width: 100%;
           background-color: #f5f5f5;
@@ -82,9 +82,7 @@
           </td>
         </tr>
       </table>
-      <span class='hidden-xs'>
-        <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
-      </span>
+      <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
       <br>
       <div>ヘボン式変換ルールは、
         <a href="http://www.seikatubunka.metro.tokyo.jp/passport/documents/0000000485.html" target="_blank" rel="noopener">
@@ -92,10 +90,6 @@
         </a>
         様のルールに準拠しております。
       </div>
-      <br />
-      <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
-      <br />
-      developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
       <br />
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
       <ins class="adsbygoogle"
@@ -109,9 +103,9 @@
       </script>
       <footer class="footer">
         <div class="container">
-          <span class='visible-xs'>
-            <button id="btnCopy" class="btn btn-info btn-lg btn-block disabled">出力されたローマ字をコピー</button>
-          </span>
+          <a href="./romaji-converter-about" target="_blank" rel="noopener">当サービスのご利用に当たって >></a>
+          <br />
+          developed by <a href="https://twitter.com/Kosuke_Zaizen" target="_blank" rel="noopener">@Kosuke_Zaizen</a><br />
         </div>
       </footer>
     </center>
