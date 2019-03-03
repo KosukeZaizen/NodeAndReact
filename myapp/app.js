@@ -44,6 +44,7 @@ rimraf("views", function (err) {
 });
 
 
+
 //サーバー起動
 let express = require('express');
 let app = express();
@@ -52,9 +53,8 @@ let path = require('path');
 
 
 
-
 //ファビコンの指定
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public/favicon.ico')));
 
 
 //ejs格納フォルダ[views]の設定
@@ -64,6 +64,38 @@ app.set('view engine', 'ejs');
 
 //viewsフォルダー内のファイル名リスト
 let views = [];
+console.log("initiate views");
+console.log("views: " + views);
+
+
+//------------------------------------------------------------
+//　ファビコンリクエストの場合
+//------------------------------------------------------------
+/*
+app.get('/favicon.ico', function (req, res) {
+  console.log("");
+  console.log("favicon request!");
+  res.writeHead(200, {'Content-Type': 'image/x-icon'} );
+  res.end();
+});
+*/
+
+
+//------------------------------------------------------------
+//　httpの場合、httpsにリダイレクト
+//------------------------------------------------------------
+app.get('*', function (req,res,next) {
+  console.log("");
+  console.log("redirect check.");
+  console.log("client IP: " + getIP(req));
+  if(req.headers['x-forwarded-proto']!='https'){
+    console.log("redirect to https://" + req.headers.host + req.url);
+    res.redirect("https://" + req.headers.host + req.url);
+  } else {
+    console.log("no need to redirect");
+    next(); /* Continue to other routes if we're not redirecting */
+  }
+})
 
 
 //------------------------------------------------------------
@@ -76,13 +108,10 @@ app.get('/index', function (req, res) {
   dispIndex(req, res);
 });
 function dispIndex(req, res){
+  console.log("");
   console.log("--dispIndex start");
   console.log("client IP: " + getIP(req));
-  if(httpsRedirect(req, res) == "https"){
-    getViewsAndRender(req, res, "index", {arrPaths: views});
-  } else {
-    return res.redirect("https://" + req.headers.host + req.url);
-  }
+  getViewsAndRender(req, res, "index", {arrPaths: views});
 }
 
 
@@ -90,14 +119,10 @@ function dispIndex(req, res){
 //　各ページ リクエスト時
 //------------------------------------------------------------
 app.get('/:name', function (req, res) {
+  console.log("");
   console.log("--get /:name");
   console.log("client IP: " + getIP(req));
-  if(httpsRedirect(req, res) === "https"){
-    console.log("views.indexOf(req.params.name): " + views.indexOf(req.params.name));
-    getViewsAndRender(req, res, req.params.name, null);
-  } else {
-    return res.redirect("https://" + req.headers.host + req.url);
-  }
+  getViewsAndRender(req, res, req.params.name, null);
 });
 
 
@@ -135,35 +160,17 @@ function getViewsAndRender(req, res, strPageName, obj){
 //　画面描画
 //------------------------------------------------------------
 function doRender(req, res, strPageName, obj){
-      if(views.indexOf(strPageName) > -1){
-        if(obj){
-          console.log("res.render(" + strPageName + ", " + obj + ")");
-          res.render(strPageName, obj);
-        } else {
-          console.log("res.render(" + strPageName + ")");
-          res.render(strPageName);
-        }
-      } else {
-        console.log("res.render(error)");
-        res.render("error", {error: "The page [" + req.params.name + "] is not exist in this website."});
-      }
-
-}
-
-
-//------------------------------------------------------------
-//　httpsリダイレクト
-//------------------------------------------------------------
-function httpsRedirect(req, res){
-  console.log("--httpsRedirect()");
-  console.log("protcol: " + req.headers['x-forwarded-proto']);
-  if(req.headers['x-forwarded-proto'] != "https" && req.protocol == "http"){
-    console.log("redirect to https!");
-    console.log("redirect to [" + "https://" + req.hostname + req.url + "]");
-    return "http";
+  if(views.indexOf(strPageName) > -1){
+    if(obj){
+      console.log("res.render(" + strPageName + ", " + obj + ")");
+      res.render(strPageName, obj);
+    } else {
+      console.log("res.render(" + strPageName + ")");
+      res.render(strPageName);
+    }
   } else {
-    console.log("We dont need to redirect this time.");
-    return "https";
+    console.log("res.render(error)");
+    res.render("error", {error: "The page [" + req.params.name + "] is not exist in this website."});
   }
 }
 
